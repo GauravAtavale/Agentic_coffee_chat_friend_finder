@@ -1,0 +1,94 @@
+[
+  {
+    "profile": {
+      "fullName": "Anagha",
+      "email": "ap8884@nyu.edu",
+      "dob": "2001-01-01",
+      "gender": "Female",
+      "location": "New York, NY",
+      "profilePhoto": "anagha_cat.jpg"
+    },
+    "socialLinks": {
+      "linkedinUrl": "https://www.linkedin.com/in/anagha-palandye",
+      "instagram": "",
+      "twitter": ""
+    },
+    "professional": {
+      "jobTitle": "AI research",
+      "company": "my_own",
+      "industry": "technology",
+      "experience": "5",
+      "education": "MS Data Science, NYU",
+      "skills": [
+        "Python",
+        "Data Science",
+        "Machine Learning",
+        "Analytics",
+        "SQL"
+      ]
+    },
+    "interests": [
+      "Sports & Fitness",
+      "Travel & Adventure",
+      "Food & Cooking",
+      "Fashion",
+      "Pets & Animals"
+    ],
+    "weekend": "Working on personal projects/hobbies",
+    "socialEnergy": "Ambivert",
+    "communicationStyle": "Thoughtful and detailed",
+    "humor": [
+      "Observational"
+    ],
+    "values": [
+      "Career growth & ambition",
+      "Work-life balance",
+      "Financial stability"
+    ],
+    "lifestyle": {
+      "fitness": "Gym regular",
+      "drinking": "Socially",
+      "smoking": "No",
+      "pets": "Love pets"
+    },
+    "evening": "Trying a new restaurant or bar",
+    "lookingFor": [
+      "New friends in my city",
+      "Professional networking",
+      "Activity partners (gym, hiking, etc.)",
+      "Dating/Romantic connection",
+      "Just seeing who's out there"
+    ],
+    "dealbreakers": [
+      "Different political views",
+      "No ambition/career drive"
+    ],
+    "distance": "Open to different cities",
+    "call transcript to know me better": [
+      {
+        "question": "If a crystal ball could tell you the truth about yourself, your life, or the future, what would you want to know?",
+        "answer": "Um, I want to know whether I end up feeling proud of the way I, I lived my life. Um, not in a perfect career sense, but whether I treated people well, stayed curious, and didn't shrink myself out of fear."
+      },
+      {
+        "question": "I see myself as someone who is curious about many different things—how strongly do you agree with this? (Big Five, Openness)",
+        "answer": "Ah, strongly agree. Um, I'll go down random rabbit holes about things like how memory works, why people behave the way they do, or how new technology shapes society, just because I'm genuinely interested."
+      },
+      {
+        "question": "Can you name four qualities about yourself you are proud of? Why?",
+        "answer": "Uh, I'm proud of my curiosity, resilience, empathy, and self-awareness. For example, when a stru- friend is struggling, I don't try to immediately fix everything. I listen, remember small details, and check in later because I know what it feels like to be unheard."
+      },
+      {
+        "question": "What is an activity that makes you lose track of time?",
+        "answer": "Um, working deeply on a problem, especially coding or researching something I don't yet understand. I look up and, uh, realize hours have passed."
+      },
+      {
+        "question": "What subjects, current events, or causes are you passionate about?",
+        "answer": "Um, I, I care a lot about mental health, ethical use of technology, and education. I'm especially interested in how we can build tools that genuinely help people instead of just optimizing for profit."
+      },
+      {
+        "question": "What's something you never thought you'd be able to do, until you actually did it?",
+        "answer": "Uh, something I never thought I could do is, uh, trust myself. I used to second-guess every decision, but I've slowly learned to make choices on my own and accept that I don't need everything figured out."
+      }
+    ]
+  }
+]
