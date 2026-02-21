@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar-drawer" id="sidebar-drawer" aria-label="Participants">
+      <div class="sidebar-inner">
+        <div class="sidebar-header">
+          <h2 class="sidebar-title">Participants</h2>
+          <button type="button" class="sidebar-close" id="sidebar-close" aria-label="Close menu">&times;</button>
+        </div>
+        <ul class="participant-list" id="participant-list">
+          <li class="participant-item">Gaurav</li>
+          <li class="participant-item">Anagha</li>
+          <li class="participant-item">Kanishkha</li>
+          <li class="participant-item">Nirbhay</li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="app-body">
+      <header class="top-header">
+        <div class="header-left">
+          <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </button>
+          <span class="notification-icon">Top Groups</span>
+        </div>
+      <div class="header-center">
+        <span class="header-title">Friend Finder</span>
+      </div>
+      <div class="header-right">
+        <label class="sound-toggle" title="Toggle notification sound">
+          <span class="sound-label">Sound</span>
+          <input type="checkbox" id="sound-enabled" checked />
+          <span class="sound-switch"></span>
+        </label>
+        <span class="profile-icon">👤</span>
+        <span class="settings-icon">⚙️</span>
+      </div>
+    </header>
+
+    <div class="tabs-container">
+      <div class="tabs-row">
+        <button class="tab active" data-tab="world">
+          World
+          <span class="notification-badge"></span>
+        </button>
+        <button class="tab" data-tab="sports">
+          Sports
+          <span class="notification-badge"></span>
+        </button>
+        <button class="tab" data-tab="technology">
+          Technology
+          <span class="notification-badge"></span>
+        </button>
+        <button class="tab" data-tab="human">
+          Human
+          <span class="notification-badge"></span>
+        </button>
+      </div>
+    </div>
+
+    <main class="chat-main">
+      <div id="chat-messages-world" class="chat-messages active" data-tab="world"></div>
+      <div id="chat-messages-sports" class="chat-messages" data-tab="sports"></div>
+      <div id="chat-messages-technology" class="chat-messages" data-tab="technology"></div>
+      <div id="chat-messages-human" class="chat-messages" data-tab="human"></div>
+    </main>
+
+    <div class="input-bar">
+      <button class="input-btn back-btn">←</button>
+      <input type="text" id="message-input" placeholder="Tap to enter..." />
+      <button class="input-btn emoji-btn">😊</button>
+      <button class="input-btn plus-btn">+</button>
+    </div>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
