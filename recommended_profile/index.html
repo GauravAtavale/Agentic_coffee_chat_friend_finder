@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommended for you — Coffee Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --surface2: #252525;
+      --text: #e8e6e3;
+      --textMuted: #9a9692;
+      --accent: #c4a574;
+      --accentDim: #8b7355;
+      --success: #7cb083;
+      --border: #2e2e2e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .profile-hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .profile-hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.35rem;
+    }
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .profile-name {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: -0.02em;
+      text-align: right;
+    }
+    .profile-tagline-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .profile-tagline {
+      color: var(--textMuted);
+      font-size: 0.875rem;
+      line-height: 1.3;
+      margin: 0;
+    }
+    .profile-bullets-flow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+    @media (max-width: 560px) {
+      .profile-bullets-flow { grid-template-columns: 1fr; }
+    }
+    .profile-section {
+      margin-bottom: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .profile-section h3 {
+      font-size: 1.575rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 0 0 0.5rem 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .profile-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .profile-bullets li {
+      color: var(--text);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      padding: 0.35rem 0;
+      padding-left: 1rem;
+      position: relative;
+      text-align: justify;
+    }
+    .profile-bullets li::before {
+      content: "·";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .btn-round {
+      border-radius: 999px;
+      padding: 0.45rem 1rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--textMuted);
+      font-size: 0.85rem;
+    }
+    .btn-round:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--surface);
+    }
+    .btn-round-gold {
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 2px 8px rgba(196, 165, 116, 0.25);
+    }
+    .btn-round-gold:hover {
+      box-shadow: 0 0 12px rgba(196, 165, 116, 0.4), 0 2px 8px rgba(196, 165, 116, 0.3);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--textMuted);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .conversation-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.6);
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1.5rem;
+      padding-top: 12vh;
+    }
+    .conversation-overlay.visible { display: flex; }
+    .conversation-popup {
+      background: var(--surface);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 1.5rem;
+      max-width: 520px;
+      width: 100%;
+      max-height: 75vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(196, 165, 116, 0.15);
+    }
+    .conversation-popup h3 {
+      margin: 0 0 0.75rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .conversation-body {
+      font-size: 0.85rem;
+      color: var(--textMuted);
+      line-height: 1.6;
+    }
+    .conversation-body .speaker { color: var(--accent); }
+    .conversation-close {
+      background: var(--surface2);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+    }
+    .conversation-close:hover { background: var(--surface2); color: var(--text); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn-primary:hover {
+      background: var(--accentDim);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(196, 165, 116, 0.35);
+    }
+    .calendar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.6);
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .calendar-overlay.visible {
+      display: flex;
+    }
+    .calendar-popup {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      max-width: 420px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+    .calendar-popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .calendar-popup-header h3 { font-size: 1.1rem; margin: 0; }
+    .calendar-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--textMuted);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .calendar-close:hover { background: var(--surface2); color: var(--text); }
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .calendar-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    .calendar-nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .calendar-nav button {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .calendar-nav button:hover { background: var(--border); }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 1.5rem;
+    }
+    .calendar-weekday {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--textMuted);
+      padding: 0.5rem 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      cursor: default;
+      background: var(--surface2);
+      color: var(--textMuted);
+    }
+    .calendar-day.other-month { opacity: 0.4; }
+    .calendar-day.has-slots {
+      cursor: pointer;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .calendar-day.has-slots:hover {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+    .calendar-day.selected {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+    .times-label {
+      font-size: 0.85rem;
+      color: var(--textMuted);
+      margin-bottom: 0.75rem;
+    }
+    .times-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .time-slot {
+      padding: 0.5rem 1rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .time-slot:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .time-slot.chosen {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+    .confirm-row {
+      margin-top: 1.5rem;
+      display: none;
+    }
+    .confirm-row.visible { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .confirm-row .summary { color: var(--success); font-size: 0.95rem; }
+    .confirm-row .btn { margin-top: 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="profile-hero">
+      <div class="profile-hero-inner">
+        <div class="profile-avatar" id="profile-avatar">GA</div>
+        <h1 class="profile-name" id="profile-title">Gaurav Atavale</h1>
+        <button type="button" class="btn btn-primary" id="lets-meet-btn">Let's meet</button>
+      </div>
+    </div>
+    <div class="profile-tagline-row">
+      <p class="profile-tagline" id="profile-tagline">Senior AI Researcher · NYC, NY</p>
+      <button type="button" class="btn btn-round btn-round-gold" id="conversation-btn">Simulated conversation</button>
+    </div>
+    <div class="profile-bullets-flow" id="profile-content"></div>
+  </div>
+
+  <div class="conversation-overlay" id="conversation-overlay">
+    <div class="conversation-popup">
+      <h3>Simulated conversation preview</h3>
+      <div class="conversation-body" id="conversation-body"></div>
+      <button type="button" class="conversation-close" id="conversation-close">Close</button>
+    </div>
+  </div>
+
+  <div class="calendar-overlay" id="calendar-overlay">
+    <div class="calendar-popup" id="calendar-popup">
+      <div class="calendar-popup-header">
+        <h3>Pick a time</h3>
+        <button type="button" class="calendar-close" id="calendar-close" aria-label="Close">×</button>
+      </div>
+      <div class="calendar-header">
+        <h3 id="calendar-month-label">February 2026</h3>
+        <div class="calendar-nav">
+          <button type="button" id="cal-prev" aria-label="Previous month">←</button>
+          <button type="button" id="cal-next" aria-label="Next month">→</button>
+        </div>
+      </div>
+      <div id="calendar-grid" class="calendar-grid"></div>
+      <p class="times-label" id="times-label">Select a date</p>
+      <div id="times-grid" class="times-grid"></div>
+      <div class="confirm-row" id="confirm-row">
+        <span class="summary" id="confirm-summary"></span>
+        <button type="button" class="btn btn-primary" id="confirm-meet">Confirm meet</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const EMBEDDED_MATCH = {
+        title: "Coffee Chat Guide: Anagha & Gaurav Atavale",
+        sections: [
+          {
+            heading: "1. What you can learn from them",
+            body: [
+              { bold: "Senior-level AI research perspective at age 20", text: " - Gaurav's accelerated career trajectory could provide insights into rapid skill development and navigating the AI industry at a young age" },
+              { bold: "Photography techniques for nature and outdoor settings", text: " - His photography interest combined with hiking could teach you composition, lighting, and capturing adventure moments during your travels" },
+              { bold: "Soccer skills and team sports dynamics", text: " - As someone focused on individual fitness (gym), you could learn about team coordination, strategic thinking, and the social aspects of group athletics" },
+              { bold: "Outgoing networking strategies", text: " - His outgoing personality could help you develop more extroverted approaches to professional networking and social situations" },
+              { bold: "Real-world AI problem-solving applications", text: " - His experience applying technology to solve practical problems could complement your research-focused background" },
+              { bold: "Outdoor adventure planning", text: " - His hiking experience could help you expand your travel and adventure interests with practical knowledge about outdoor activities" }
+            ]
+          },
+          {
+            heading: "2. What they can learn from you",
+            body: [
+              { bold: "Advanced data science methodologies", text: " - Your MS in Data Science from NYU and skills in Python, SQL, and analytics could deepen his technical toolkit beyond general AI research" },
+              { bold: "Work-life balance strategies", text: " - Your ambivert nature and structured approach to balancing personal projects, fitness, and social activities could help him maintain sustainability in his demanding career" },
+              { bold: "Thoughtful communication and empathy", text: " - Your detailed communication style and demonstrated empathy could help him develop stronger interpersonal skills for team leadership" },
+              { bold: "Self-awareness and personal growth techniques", text: " - Your journey toward trusting yourself and building confidence could provide valuable insights for someone navigating a senior role at a young age" },
+              { bold: "Urban exploration and food culture", text: " - Your habit of trying new restaurants and bars in NYC could introduce him to the city's culinary scene and networking opportunities" },
+              { bold: "Ethical technology perspective", text: " - Your passion for mental health and ethical use of technology could broaden his view on responsible AI development and social impact" }
+            ]
+          },
+          {
+            heading: "3. Simulated conversation preview",
+            conversation: "**Anagha:** Hi Gaurav! Thanks for meeting up. I have to ask - Senior AI Researcher at 20? That's incredible. How did you accelerate your career so quickly?\n\n**Gaurav Atavale:** Thanks! I've been obsessed with AI since high school and just dove deep early. But I'm actually curious about your research approach - what kind of AI problems are you tackling in your own work?\n\n**Anagha:** I'm focusing on ethical AI applications, especially around mental health tools. I want to build technology that genuinely helps people rather than just optimizing for engagement. What drew you to real-world problem solving?\n\n**Gaurav Atavale:** That's exactly what excites me! I love seeing code actually impact people's lives. Your ethics focus is something I want to develop more - sometimes I get so caught up in the technical challenge that I don't pause to consider the broader implications.\n\n**Gaurav Atavale:** Maybe we could grab dinner after a hike sometime? I'd love to hear more about your data science methodologies."
+          }
+        ]
+      };
+
+      const EMBEDDED_SLOTS = ["2026-02-21T10:00","2026-02-21T10:30","2026-02-21T11:00","2026-02-21T11:30","2026-02-23T18:00","2026-02-23T18:30","2026-02-23T19:00","2026-02-23T19:30","2026-02-24T18:00","2026-02-24T18:30","2026-02-24T19:00","2026-02-24T19:30","2026-02-25T18:00","2026-02-25T18:30","2026-02-25T19:00","2026-02-25T19:30","2026-02-26T18:00","2026-02-26T18:30","2026-02-26T19:00","2026-02-26T19:30","2026-02-27T18:00","2026-02-27T18:30","2026-02-27T19:00","2026-02-27T19:30","2026-02-28T10:00","2026-02-28T10:30","2026-02-28T11:00","2026-02-28T11:30","2026-03-02T18:00","2026-03-02T18:30","2026-03-02T19:00","2026-03-02T19:30","2026-03-03T18:00","2026-03-03T18:30","2026-03-03T19:00","2026-03-03T19:30","2026-03-04T18:00","2026-03-04T18:30","2026-03-04T19:00","2026-03-04T19:30","2026-03-05T18:00","2026-03-05T18:30","2026-03-05T19:00","2026-03-05T19:30","2026-03-06T18:00","2026-03-06T18:30","2026-03-06T19:00","2026-03-06T19:30"];
+
+      let slots = [];
+      let currentMonth = new Date(2026, 1, 1);
+      let selectedDate = null;
+      let selectedSlot = null;
+
+      function getViewerAndRecommended() {
+        const params = new URLSearchParams(location.search);
+        return {
+          viewer: params.get('viewer') || 'anagha_palandye',
+          recommended: params.get('recommended') || 'gaurav_atavale'
+        };
+      }
+
+      function initials(name) {
+        return name.split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+      }
+
+      function personaFromKey(key) {
+        return key.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('_');
+      }
+
+      function loadData() {
+        const { viewer, recommended } = getViewerAndRecommended();
+        const matchPath = `../outputs/match_${viewer}_${recommended}.md`;
+        const slotsPath = `../outputs/available_slots_${viewer}_${recommended}.json`;
+        const dataKey = personaFromKey(recommended);
+        const personaPath = `../data/${dataKey}.json`;
+        const name = recommended.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+
+        document.getElementById('profile-title').textContent = name;
+        const avatarEl = document.getElementById('profile-avatar');
+        avatarEl.innerHTML = '';
+        avatarEl.textContent = initials(name);
+
+        slots = EMBEDDED_SLOTS;
+        initCalendar();
+
+        fetch(slotsPath).then(r => r.ok ? r.json() : null).then(data => {
+          if (data && data.slots) slots = data.slots;
+          initCalendar();
+        }).catch(function() { slots = EMBEDDED_SLOTS; initCalendar(); });
+
+        fetch(personaPath).then(r => r.ok ? r.json() : null).then(function(data) {
+          let job = '', location = '', photo = null;
+          if (data) {
+            if (Array.isArray(data) && data[0] && data[0].profile) {
+              job = (data[0].professional && data[0].professional.jobTitle) ? data[0].professional.jobTitle : '';
+              location = (data[0].profile.location) ? data[0].profile.location : '';
+              photo = data[0].profile.profilePhoto || null;
+            } else if (data.job !== undefined || data.location !== undefined) {
+              job = data.job || '';
+              location = data.location || '';
+            }
+          }
+          const tagline = [job, location].filter(Boolean).join(' · ') || 'Coffee chat match';
+          document.getElementById('profile-tagline').textContent = tagline;
+          if (photo && (photo.startsWith('http') || photo.startsWith('/'))) {
+            avatarEl.innerHTML = '<img src="' + photo + '" alt="">';
+          } else {
+            avatarEl.textContent = initials(name);
+          }
+        }).catch(function() {
+          document.getElementById('profile-tagline').textContent = 'Coffee chat match';
+          document.getElementById('profile-avatar').textContent = initials(name);
+        });
+
+        fetch(matchPath).then(r => r.ok ? r.text() : null).then(md => {
+          if (md) renderMatchFromMarkdown(md);
+          else renderMatchFromEmbedded(EMBEDDED_MATCH);
+        }).catch(function() { renderMatchFromEmbedded(EMBEDDED_MATCH); });
+      }
+
+      let conversationHtml = '';
+
+      function firstSentence(text) {
+        const t = (text || '').replace(/\s+/g, ' ').trim();
+        const idx = t.search(/[.!?]/);
+        return idx >= 0 ? t.slice(0, idx + 1) : t;
+      }
+
+      function shortSentenceBullet(boldText, tailText) {
+        const bold = (boldText || '').trim();
+        if (!tailText) return bold;
+        const sentence = firstSentence(tailText);
+        return sentence ? sentence : bold;
+      }
+
+      function renderMatchFromEmbedded(data) {
+        const el = document.getElementById('profile-content');
+        el.innerHTML = '';
+        const learnFrom = (data.sections.find(s => s.heading && s.heading.toLowerCase().includes('what you can learn')) || {}).body || [];
+        const theyLearn = (data.sections.find(s => s.heading && s.heading.toLowerCase().includes('what they can learn')) || {}).body || [];
+        const convSec = data.sections.find(s => s.heading && s.heading.toLowerCase().includes('conversation'));
+        conversationHtml = convSec && convSec.conversation
+          ? convSec.conversation.replace(/\*\*([^*]+)\*\*:/g, '<span class="speaker">$1:</span> ').replace(/\n/g, '<br>')
+          : '';
+        const b1 = learnFrom.slice(0, 3).map(item => shortSentenceBullet(item.bold, item.text));
+        const b2 = theyLearn.slice(0, 3).map(item => shortSentenceBullet(item.bold, item.text));
+        addBulletSection(el, "What you can learn from them", b1);
+        addBulletSection(el, "What they can learn from you", b2);
+      }
+
+      function addBulletSection(parent, title, bullets) {
+        const sec = document.createElement('div');
+        sec.className = 'profile-section';
+        const h3 = document.createElement('h3');
+        h3.textContent = title;
+        sec.appendChild(h3);
+        const ul = document.createElement('ul');
+        ul.className = 'profile-bullets';
+        bullets.forEach(b => { const li = document.createElement('li'); li.textContent = b; ul.appendChild(li); });
+        sec.appendChild(ul);
+        parent.appendChild(sec);
+      }
+
+      function renderMatchFromMarkdown(md) {
+        const el = document.getElementById('profile-content');
+        el.innerHTML = '';
+        const sections = md.split(/\n## /).filter(Boolean);
+        let learnFrom = [], theyLearn = [], convBlock = '';
+        sections.forEach(block => {
+          const heading = block.split('\n')[0].replace(/^#+\s*/, '').trim();
+          if (heading.toLowerCase().includes('what you can learn from them')) {
+            learnFrom = parseBulletLinesFromBlock(block);
+          } else if (heading.toLowerCase().includes('what they can learn from you')) {
+            theyLearn = parseBulletLinesFromBlock(block);
+          } else if (heading.toLowerCase().includes('conversation')) {
+            convBlock = block.split('\n').slice(1).join('\n').trim();
+          }
+        });
+        conversationHtml = convBlock
+          ? convBlock.replace(/\*\*([^*]+)\*\*:/g, '<span class="speaker">$1:</span> ').replace(/\n/g, '<br>')
+          : '';
+        const b1 = learnFrom.slice(0, 3);
+        const b2 = theyLearn.slice(0, 3);
+        addBulletSection(el, "What you can learn from them", b1);
+        addBulletSection(el, "What they can learn from you", b2);
+      }
+
+      function parseBulletLinesFromBlock(block) {
+        const rest = block.split('\n').slice(1).join('\n');
+        const bullets = [];
+        rest.split(/\n-\s+/).filter(Boolean).forEach(line => {
+          const m = line.match(/^\*\*([^*]+)\*\*\s*[-—]\s*(.+)/);
+          if (m) bullets.push(shortSentenceBullet(m[1].trim(), m[2].trim()));
+          else {
+            const b = line.match(/^\*\*([^*]+)\*\*/);
+            if (b) bullets.push(b[1].trim());
+          }
+        });
+        return bullets;
+      }
+
+      function slotsByDate() {
+        const byDate = {};
+        slots.forEach(s => {
+          const d = s.slice(0, 10);
+          if (!byDate[d]) byDate[d] = [];
+          byDate[d].push(s.slice(11, 16));
+        });
+        Object.keys(byDate).forEach(d => byDate[d].sort());
+        return byDate;
+      }
+
+      function initCalendar() {
+        const byDate = slotsByDate();
+        const firstSlot = slots[0];
+        if (firstSlot) {
+          const [y, m] = firstSlot.slice(0, 7).split('-').map(Number);
+          currentMonth = new Date(y, m - 1, 1);
+        }
+        document.getElementById('lets-meet-btn').onclick = function() {
+          document.getElementById('calendar-overlay').classList.add('visible');
+          selectedDate = null;
+          selectedSlot = null;
+          document.getElementById('times-label').textContent = 'Select a date';
+          document.getElementById('times-grid').innerHTML = '';
+          document.getElementById('confirm-row').classList.remove('visible');
+          renderCalendar(byDate);
+        };
+        document.getElementById('cal-prev').onclick = function() {
+          currentMonth.setMonth(currentMonth.getMonth() - 1);
+          renderCalendar(byDate);
+        };
+        document.getElementById('cal-next').onclick = function() {
+          currentMonth.setMonth(currentMonth.getMonth() + 1);
+          renderCalendar(byDate);
+        };
+      }
+
+      function renderCalendar(byDate) {
+        const year = currentMonth.getFullYear();
+        const month = currentMonth.getMonth();
+        document.getElementById('calendar-month-label').textContent = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+        const first = new Date(year, month, 1);
+        const last = new Date(year, month + 1, 0);
+        const startPad = first.getDay();
+        const daysInMonth = last.getDate();
+        const prevMonth = month === 0 ? 11 : month - 1;
+        const prevYear = month === 0 ? year - 1 : year;
+        const prevLast = new Date(prevYear, prevMonth + 1, 0).getDate();
+
+        const grid = document.getElementById('calendar-grid');
+        grid.innerHTML = '';
+        const weekdays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        weekdays.forEach(w => {
+          const d = document.createElement('div');
+          d.className = 'calendar-weekday';
+          d.textContent = w;
+          grid.appendChild(d);
+        });
+
+        for (let i = 0; i < startPad; i++) {
+          const d = document.createElement('div');
+          d.className = 'calendar-day other-month';
+          d.textContent = prevLast - startPad + 1 + i;
+          grid.appendChild(d);
+        }
+        for (let day = 1; day <= daysInMonth; day++) {
+          const d = document.createElement('div');
+          const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const hasSlots = !!byDate[dateKey];
+          d.className = 'calendar-day' + (hasSlots ? ' has-slots' : '') + (selectedDate === dateKey ? ' selected' : '');
+          d.textContent = day;
+          if (hasSlots) {
+            d.onclick = function() {
+              selectedDate = dateKey;
+              selectedSlot = null;
+              document.getElementById('confirm-row').classList.remove('visible');
+              renderCalendar(byDate);
+              renderTimes(byDate[dateKey] || [], dateKey);
+            };
+          }
+          grid.appendChild(d);
+        }
+        const totalCells = startPad + daysInMonth;
+        const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+        for (let i = 0; i < remaining; i++) {
+          const d = document.createElement('div');
+          d.className = 'calendar-day other-month';
+          d.textContent = i + 1;
+          grid.appendChild(d);
+        }
+      }
+
+      function renderTimes(times, dateKey) {
+        document.getElementById('times-label').textContent = times.length ? 'Pick a time on ' + new Date(dateKey + 'T12:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) : 'Select a date';
+        const grid = document.getElementById('times-grid');
+        grid.innerHTML = '';
+        times.forEach(t => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'time-slot' + (selectedSlot === t ? ' chosen' : '');
+          btn.textContent = t;
+          btn.onclick = function() {
+            selectedSlot = t;
+            document.querySelectorAll('.time-slot').forEach(e => e.classList.remove('chosen'));
+            btn.classList.add('chosen');
+            const summary = document.getElementById('confirm-summary');
+            summary.textContent = new Date(dateKey + 'T' + t).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+            document.getElementById('confirm-row').classList.add('visible');
+          };
+          grid.appendChild(btn);
+        });
+      }
+
+      document.getElementById('confirm-meet').onclick = function() {
+        if (selectedSlot && selectedDate) {
+          const dt = new Date(selectedDate + 'T' + selectedSlot);
+          alert('Meet requested for ' + dt.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + '. (Integration with backend can send this to the server.)');
+        }
+      };
+
+      function closeCalendar() {
+        document.getElementById('calendar-overlay').classList.remove('visible');
+      }
+      document.getElementById('calendar-close').onclick = closeCalendar;
+      document.getElementById('calendar-overlay').onclick = function(e) {
+        if (e.target === document.getElementById('calendar-overlay')) closeCalendar();
+      };
+      document.getElementById('calendar-popup').onclick = function(e) { e.stopPropagation(); };
+
+      document.getElementById('conversation-btn').onclick = function() {
+        document.getElementById('conversation-body').innerHTML = conversationHtml || '<p>No conversation preview available.</p>';
+        document.getElementById('conversation-overlay').classList.add('visible');
+      };
+      document.getElementById('conversation-close').onclick = function() {
+        document.getElementById('conversation-overlay').classList.remove('visible');
+      };
+      document.getElementById('conversation-overlay').onclick = function(e) {
+        if (e.target === document.getElementById('conversation-overlay')) document.getElementById('conversation-overlay').classList.remove('visible');
+      };
+      document.querySelector('.conversation-popup').onclick = function(e) { e.stopPropagation(); };
+
+      loadData();
+    })();
+  </script>
+</body>
+</html>
