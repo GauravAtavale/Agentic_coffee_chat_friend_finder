@@ -1,0 +1,94 @@
+[
+  {
+    "timestamp": "2026-02-14T18:04:31.012Z",
+    "profile": {
+      "fullName": "Kanishkha",
+      "email": "Kanishkha_s@gmail.com",
+      "dob": "1999-01-01",
+      "gender": "Male",
+      "location": "New York, NY",
+      "profilePhoto": null
+    },
+    "socialLinks": {
+      "linkedinUrl": "https://www.linkedin.com/in/gauravatavale/",
+      "instagram": "",
+      "twitter": ""
+    },
+    "professional": {
+      "jobTitle": "AI Research",
+      "company": "Amex",
+      "industry": "Fianace",
+      "experience": "9",
+      "education": "MS in Data Science, IUB",
+      "skills": [
+        "Python",
+        "Data Science",
+        "Machine Learning",
+        "Leadership",
+        "SQL"
+      ]
+    },
+    "interests": [
+      "Sports & Fitness",
+      "Travel & Adventure",
+      "Technology",
+      "Outdoors & Nature",
+      "Pets & Animals"
+    ],
+    "weekend": "Working on personal projects/hobbies",
+    "socialEnergy": "Extrovert",
+    "communicationStyle": "Casual and spontaneous",
+    "humor": [
+      "Witty & sarcastic"
+    ],
+    "values": [
+      "Financial stability",
+      "Health & wellness",
+      "Career growth & ambition"
+    ],
+    "lifestyle": {
+      "fitness": "Gym regular",
+      "drinking": "Rarely",
+      "smoking": "No",
+      "pets": "Love pets"
+    },
+    "evening": "Attending an event (concert, sports, etc.)",
+    "lookingFor": [
+      "New friends in my city",
+      "Activity partners (gym, hiking, etc.)",
+      "Dating/Romantic connection",
+      "Just seeing who's out there"
+    ],
+    "dealbreakers": [
+      "Different values around family"
+    ],
+    "distance": "Anywhere in the city",
+
+    "call transcript to know me better": [
+      {
+        "question": "If a crystal ball could tell you the truth about yourself, your life, or the future, what would you want to know?",
+        "answer": "I'd actually want to know if I eventually create a life that feels balanced and secure and safe. Uh, for example, having enough stability that I don't constantly stress about money or uncertainty, I guess."
+      },
+      {
+        "question": "I see myself as someone who is curious about many different things—how strongly do you agree with this? (Big Five, Openness)",
+        "answer": "I actually sort of agree with this statement. Um, I enjoy learning new things, especially if they will definitely help me improve. Uh, for example, I like to watch tutorials on skills that make my everyday tasks easier. It could be my personal life or my professional life, or just skills in general to keep me happy."
+      },
+      {
+        "question": "Can you name four qualities about yourself you are proud of? Why?",
+        "answer": "I'm hardworking, um, I'm adaptable, organized, and I am dependable. Um, I'm the person others can rely on when something needs to get done. Uh, I think I'm very proud of that."
+      },
+      {
+        "question": "What is an activity that makes you lose track of time?",
+        "answer": "Well, uh, planning and organizing things. Uh, it could be things, my life, to-do lists, setting goals, or just cleaning up stuff at home and work. Yep, [chuckles] this makes time disappear."
+      },
+      {
+        "question": "What subjects, current events, or causes are you passionate about?",
+        "answer": "I'm quite passionate about learning about productivity, um, improving oneself, uh, and also learning about long, long-term stability. Uh, it could be investments in finance or personally as well. I'm motivated by small improvements that add up over time."
+      },
+      {
+        "question": "What's something you never thought you'd be able to do, until you actually did it?",
+        "answer": "Good question, actually. Um, I think pushing through uncertainty and keeping, uh, move-- keep moving forward. Um, continuing to, continuing to do the thing even when I'm not able to figure it out. At the end, uh, that I can make sense out of it. I think that's what I thought I could never do, but I learned to do it on the way."
+      }
+    ]
+  }
+]
