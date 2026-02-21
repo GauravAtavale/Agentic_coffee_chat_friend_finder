@@ -525,6 +525,119 @@
     sidebarClose.addEventListener('click', closeSidebar);
   }
 
+  // Profile and Recommend Coffee Chat (push bar from right)
+  const profileSelect = document.getElementById('profile-select');
+  const recommendBtn = document.getElementById('recommend-coffee-chat-btn');
+  const recommendationsPushbar = document.getElementById('recommendations-pushbar');
+  const recommendationsContent = document.getElementById('recommendations-content');
+  const recommendationsTitle = document.getElementById('recommendations-title');
+  const recommendationsClose = document.getElementById('recommendations-close');
+  const recommendationsOverlay = document.querySelector('.recommendations-pushbar-overlay');
+
+  function openRecommendationsPushbar() {
+    if (recommendationsPushbar) {
+      recommendationsPushbar.classList.add('open');
+      recommendationsPushbar.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function closeRecommendationsPushbar() {
+    if (recommendationsPushbar) {
+      recommendationsPushbar.classList.remove('open');
+      recommendationsPushbar.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function renderRecommendations(data, profileName) {
+    if (!recommendationsContent) return;
+    const recs = (data && data.recommendations) || [];
+    const err = data && data.error;
+    recommendationsTitle.textContent = 'Recommendations for ' + (profileName || 'You');
+    if (err && recs.length === 0) {
+      recommendationsContent.className = 'recommendations-pushbar-content';
+      recommendationsContent.innerHTML = '<p class="rec-error">' + escapeHtml(err) + '</p>';
+      return;
+    }
+    recommendationsContent.className = 'recommendations-pushbar-content';
+    if (recs.length === 0) {
+      recommendationsContent.innerHTML = '<p class="rec-detail">No recommendations yet. Try again after more conversation.</p>';
+      return;
+    }
+    const sorted = recs.slice().sort(function (a, b) {
+      return (b.coffee_chat_likelihood || 0) - (a.coffee_chat_likelihood || 0);
+    });
+    let html = '';
+    sorted.forEach(function (r, i) {
+      const rank = i + 1;
+      const user = escapeHtml(r.user || 'Unknown');
+      const likelihood = (r.coffee_chat_likelihood != null) ? Math.round(Number(r.coffee_chat_likelihood) * 100) + '%' : '—';
+      const common = Array.isArray(r.common_aspects) ? r.common_aspects.join(', ') : (r.common_aspects || '');
+      const learnFrom = escapeHtml(r.what_you_can_learn_from_them || '');
+      const theyLearn = escapeHtml(r.what_they_can_learn_from_you || '');
+      html += '<div class="rec-row" data-index="' + i + '">';
+      html += '<div class="rec-row-head">';
+      html += '<span>#' + rank + ' ' + user + '</span>';
+      html += '<span class="rec-row-chevron">▼</span>';
+      html += '</div>';
+      html += '<div class="rec-row-body">';
+      html += '<div class="rec-likelihood">Likelihood: ' + likelihood + '</div>';
+      if (common) html += '<div class="rec-detail"><span class="rec-detail-label">Common:</span> ' + escapeHtml(common) + '</div>';
+      if (learnFrom) html += '<div class="rec-detail"><span class="rec-detail-label">You can learn:</span> ' + learnFrom + '</div>';
+      if (theyLearn) html += '<div class="rec-detail"><span class="rec-detail-label">They can learn:</span> ' + theyLearn + '</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    recommendationsContent.innerHTML = html;
+    recommendationsContent.querySelectorAll('.rec-row-head').forEach(function (head) {
+      head.addEventListener('click', function () {
+        var row = head.closest('.rec-row');
+        if (row) row.classList.toggle('expanded');
+      });
+    });
+  }
+
+  if (recommendBtn && recommendationsContent) {
+    recommendBtn.addEventListener('click', function () {
+      var profile = (profileSelect && profileSelect.value) ? profileSelect.value : 'Gaurav';
+      recommendBtn.disabled = true;
+      recommendationsContent.className = 'recommendations-pushbar-content loading';
+      recommendationsContent.innerHTML = 'Loading recommendations… (this may take 20–30 seconds)';
+      recommendationsTitle.textContent = 'Coffee Chat Recommendations for ' + profile;
+      openRecommendationsPushbar();
+
+      fetch('/api/recommendations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: profile }),
+      })
+        .then(function (r) {
+          return r.json()
+            .then(function (data) {
+              if (!r.ok) {
+                var err = (data && data.error) ? data.error : r.statusText;
+                return { error: err, recommendations: [] };
+              }
+              return data;
+            })
+            .catch(function () {
+              return { error: r.statusText || 'Server error', recommendations: [] };
+            });
+        })
+        .then(function (data) {
+          renderRecommendations(data, profile);
+        })
+        .catch(function (err) {
+          renderRecommendations({ error: err.message || 'Request failed' }, profile);
+        })
+        .finally(function () {
+          recommendBtn.disabled = false;
+        });
+    });
+  }
+
+  if (recommendationsClose) recommendationsClose.addEventListener('click', closeRecommendationsPushbar);
+  if (recommendationsOverlay) recommendationsOverlay.addEventListener('click', closeRecommendationsPushbar);
+
   // Initial load: world tab, input disabled until Human tab
   setMessageInputEnabled(false);
   switchTab('world');

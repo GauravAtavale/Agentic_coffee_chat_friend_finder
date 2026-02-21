@@ -2,6 +2,7 @@
 Web server for Agentic Social: world_chat UI. Runs run.py on startup
 and streams new lines from data/conversational_history.txt to the UI.
 """
+import asyncio
 import json
 import os
 import signal
@@ -221,6 +222,50 @@ async def api_human_message(request: Request):
         return {"ok": True, "message": entry}
     except Exception as e:
         return {"ok": False, "error": str(e)}
+
+
+# Profile display name -> internal user id for recommendation API
+PROFILE_USER_IDS = {
+    "Gaurav": "Gaurav_Atavale",
+    "Anagha": "Anagha_Palandye",
+    "Kanishkha": "Kanishkha_S",
+    "Nirbhay": "Nirbhay_R",
+}
+
+
+def _run_recommendations_sync(profile_user_id: str):
+    """Run blocking get_recommendations in a way safe for async."""
+    from recommendation import get_recommendations
+    return get_recommendations(profile_user_id)
+
+
+@app.get("/api/recommendations")
+async def api_get_recommendations():
+    """Return last saved recommendations from data/recommendations.json (for quick display or fallback)."""
+    rec_file = DATA_DIR / "recommendations.json"
+    if not rec_file.exists():
+        return {"recommendations": []}
+    try:
+        data = json.loads(rec_file.read_text(encoding="utf-8"))
+        return data
+    except Exception:
+        return {"recommendations": []}
+
+
+@app.post("/api/recommendations")
+async def api_recommendations(request: Request):
+    """Generate coffee-chat recommendations for the selected profile. Body: { \"user\": \"Gaurav\" } or internal id."""
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+    profile = (body.get("user") or "").strip() or "Gaurav"
+    profile_user_id = PROFILE_USER_IDS.get(profile) or profile
+    try:
+        result = await asyncio.to_thread(_run_recommendations_sync, profile_user_id)
+        return result
+    except Exception as e:
+        return JSONResponse(content={"error": str(e), "recommendations": []}, status_code=500)
 
 
 @app.get("/health")

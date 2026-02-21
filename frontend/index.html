@@ -33,11 +33,21 @@
             <span class="hamburger-line"></span>
           </button>
           <span class="notification-icon">Top Groups</span>
+          <div class="profile-select-wrap">
+            <label for="profile-select" class="profile-label">Profile</label>
+            <select id="profile-select" class="profile-select" aria-label="Select profile">
+              <option value="Gaurav">Gaurav</option>
+              <option value="Anagha" selected>Anagha</option>
+              <option value="Kanishkha">Kanishkha</option>
+              <option value="Nirbhay">Nirbhay</option>
+            </select>
+          </div>
         </div>
       <div class="header-center">
         <span class="header-title">Coffee Chat Friend Finder</span>
       </div>
       <div class="header-right">
+        <button type="button" class="recommend-btn" id="recommend-coffee-chat-btn">Recommend Coffee Chat</button>
         <label class="sound-toggle" title="Toggle notification sound">
           <span class="sound-label">Sound</span>
           <input type="checkbox" id="sound-enabled" checked />
@@ -99,6 +109,21 @@
     </div>
     </div>
   </div>
+
+  <!-- Recommendations push bar (slides in from right) -->
+  <div id="recommendations-pushbar" class="recommendations-pushbar" aria-hidden="true">
+    <div class="recommendations-pushbar-overlay"></div>
+    <div class="recommendations-pushbar-panel">
+      <div class="recommendations-pushbar-header">
+        <h2 id="recommendations-title">Coffee Chat Recommendations</h2>
+        <button type="button" class="recommendations-pushbar-close" id="recommendations-close" aria-label="Close">&times;</button>
+      </div>
+      <div id="recommendations-content" class="recommendations-pushbar-content">
+        <!-- Loading or list injected here -->
+      </div>
+    </div>
+  </div>
+
   <script src="/static/app.js?v=2"></script>
 </body>
 </html>

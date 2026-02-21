@@ -181,6 +181,178 @@ body {
   cursor: pointer;
 }
 
+.profile-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.profile-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #3A2E1F;
+}
+.profile-select {
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  border: 1px solid #B8935F;
+  border-radius: 8px;
+  background: #fff;
+  color: #3A2E1F;
+  cursor: pointer;
+}
+.recommend-btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border: 1px solid #6B8E23;
+  border-radius: 8px;
+  background: #6B8E23;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.recommend-btn:hover {
+  background: #5a7d1e;
+}
+.recommend-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Recommendations push bar (slides in from right) */
+.recommendations-pushbar {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0.25s ease;
+}
+.recommendations-pushbar.open {
+  pointer-events: auto;
+  visibility: visible;
+}
+.recommendations-pushbar-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.recommendations-pushbar.open .recommendations-pushbar-overlay {
+  opacity: 1;
+}
+.recommendations-pushbar-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 340px;
+  max-width: 95vw;
+  background: #F5F0E6;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  border-left: 2px solid #B8935F;
+}
+.recommendations-pushbar.open .recommendations-pushbar-panel {
+  transform: translateX(0);
+}
+.recommendations-pushbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 14px;
+  border-bottom: 1px solid #D4A574;
+  flex-shrink: 0;
+}
+.recommendations-pushbar-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #3A2E1F;
+}
+.recommendations-pushbar-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #3A2E1F;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+.recommendations-pushbar-content {
+  padding: 12px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 200px;
+}
+.recommendations-pushbar-content.loading {
+  text-align: center;
+  color: #5a4a3a;
+  padding-top: 24px;
+  display: block;
+}
+.rec-error {
+  color: #c0392b;
+  font-size: 0.9rem;
+}
+/* Each recommendation: row with user name + dropdown */
+.rec-row {
+  background: #fff;
+  border: 1px solid #D4A574;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  color: #3A2E1F;
+}
+.rec-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.rec-row-head:hover {
+  background: #faf8f3;
+}
+.rec-row-head .rec-row-chevron {
+  flex-shrink: 0;
+  margin-left: 8px;
+  color: #B8935F;
+  transition: transform 0.2s ease;
+}
+.rec-row.expanded .rec-row-chevron {
+  transform: rotate(180deg);
+}
+.rec-row-body {
+  display: none;
+  padding: 0 14px 12px;
+  border-top: 1px solid #E8DCC6;
+  font-size: 0.85rem;
+  color: #5a4a3a;
+}
+.rec-row.expanded .rec-row-body {
+  display: block;
+}
+.rec-row-body .rec-detail {
+  margin-top: 8px;
+}
+.rec-row-body .rec-detail-label {
+  font-weight: 600;
+  color: #3A2E1F;
+  margin-bottom: 2px;
+}
+.rec-row-body .rec-likelihood {
+  color: #6B8E23;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
 /* Sound toggle */
 .sound-toggle {
   display: flex;
