@@ -1,5 +1,8 @@
 # Agentic Social Simulator
 
+source /Users/gauravatavale/Documents/GitHub/Agentic_coffee_chat_friend_finder/agentic_social/bin/activate
+
+
 An **AI-powered social networking simulator** where you build a persona from a voice interview, chat with an AI (Claude), and watch multi-agent group conversations—including a **General** tab that replays or streams conversations (e.g. from [Agentic_social_gaurav](https://github.com/GauravAtavale/Agentic_social)) with configurable pauses between messages.
 
 ---

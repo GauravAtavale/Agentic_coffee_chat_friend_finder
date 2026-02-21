@@ -1,0 +1,4 @@
+{
+  "primary": "claude-sonnet-4-5-20250929",
+  "fallback": "llama-3.3-70b-versatile"
+}

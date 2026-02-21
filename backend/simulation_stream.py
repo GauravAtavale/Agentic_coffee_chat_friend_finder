@@ -28,8 +28,6 @@ FILE_NAMES = {
     "Nirbhay_R": BACKEND_DIR / "agent_Nirbhay.py",
 }
 INITIAL_CREDITS = 100
-BID_MODEL_PRIMARY = "claude-3-5-sonnet-20240620"
-BID_MODEL_FALLBACK = "llama-3.1-8b-instant"
 
 
 def _ensure_history_file():
@@ -101,11 +99,11 @@ def run_simulation_stream(max_rounds=15, pause_seconds=0):
             for key in PERSON_ROLE:
                 if credits_left[key] > 0:
                     try:
-                        llm_bid = utils.generate_bid_score_each_user(key, credits_left, BID_MODEL_PRIMARY)
+                        llm_bid = utils.generate_bid_score_each_user(key, credits_left, utils.PRIMARY_MODEL)
                         random_numbers[key] = int(0.01 * float(json.loads(llm_bid)["score"]) * credits_left[key])
                     except Exception:
                         try:
-                            llm_bid = utils.generate_bid_score_each_user(key, credits_left, BID_MODEL_FALLBACK)
+                            llm_bid = utils.generate_bid_score_each_user(key, credits_left, utils.FALLBACK_MODEL)
                             random_numbers[key] = int(0.01 * float(json.loads(llm_bid)["score"]) * credits_left[key])
                         except Exception:
                             random_numbers[key] = 0

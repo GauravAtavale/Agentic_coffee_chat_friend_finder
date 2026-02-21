@@ -1,17 +1,50 @@
 """
-Final flow of Agentic Social Simulation:
+Final flow of Agentic Social Simulation.
+Supports per-channel conversations: run with --channel finance (or world, technology, healthcare, architecture, computer_science).
 """
-import random
-import time
-import re
+import argparse
 import json
+import re
+import sys
 from pathlib import Path
 import utils
 
 # Paths relative to repo root
 REPO_ROOT = Path(__file__).resolve().parent.parent
-HISTORY_FILE = REPO_ROOT / "data" / "conversational_history.txt"
 BACKEND_DIR = Path(__file__).resolve().parent
+DATA_DIR = REPO_ROOT / "data"
+
+# Channel -> history filename (must match server.CHANNEL_FILES)
+CHANNEL_FILES = {
+    "world": "conversational_history.txt",
+    "finance": "finance_convers_history.txt",
+    "technology": "tech_convers_history.txt",
+    "healthcare": "healthcare_convers_history.txt",
+    "architecture": "architecture_convers_history.txt",
+    "computer_science": "computer_science_convers_history.txt",
+}
+
+def _parse_args():
+    p = argparse.ArgumentParser(description="Run agent simulation for a channel")
+    p.add_argument("--channel", default="world", help="Channel name (world, finance, technology, healthcare, architecture, computer_science)")
+    return p.parse_args()
+
+def _history_file_for_channel(channel: str) -> Path:
+    filename = CHANNEL_FILES.get(channel, CHANNEL_FILES["world"])
+    return (DATA_DIR / filename).resolve()
+
+def _ensure_channel_has_seed(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.exists() or path.stat().st_size == 0:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write('{"role": "Gaurav", "content": "Conversation started."}\n')
+
+# Parse channel and set history file for this process (and for utils)
+_args = _parse_args()
+_channel = _args.channel
+HISTORY_FILE = _history_file_for_channel(_channel)
+utils.HISTORY_FILE = HISTORY_FILE
+_ensure_channel_has_seed(HISTORY_FILE)
 
 # Mock data for testing
 person_role_dict = {
@@ -30,32 +63,26 @@ file_names_dict = {
     }
 
 # Loop until NO ONE has credits left (everyone is 0)
-
 # Run iterations of the simulation
-# init_person = "Gaurav_Atavale"
-if not HISTORY_FILE.exists():
-    raise FileNotFoundError(f"History file not found: {HISTORY_FILE}")
 with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-    lines = [ln.strip() for ln in f.readlines() if ln.strip()]  # Filter empty lines
+    lines = [ln.strip() for ln in f.readlines() if ln.strip()]
 if not lines:
-    raise ValueError("History file is empty")
-try:
-    last_entry = json.loads(lines[-1])
-    last_role = last_entry.get('role')
-    if not last_role or last_role not in role_person_dict:
-        # Default to first person if role not found
-        init_person = list(person_role_dict.keys())[0]
-        print(f"Warning: Role '{last_role}' not found in role_person_dict. Using default: {init_person}")
-    else:
-        init_person = role_person_dict[last_role]
-except (json.JSONDecodeError, KeyError) as e:
-    # Default to first person if parsing fails
     init_person = list(person_role_dict.keys())[0]
-    print(f"Warning: Could not parse last line or find role. Using default: {init_person}. Error: {e}") 
+else:
+    try:
+        last_entry = json.loads(lines[-1])
+        last_role = last_entry.get("role")
+        if not last_role or last_role not in role_person_dict:
+            init_person = list(person_role_dict.keys())[0]
+            print(f"[run.py channel={_channel}] Role '{last_role}' not in dict, using {init_person}")
+        else:
+            init_person = role_person_dict[last_role]
+    except (json.JSONDecodeError, KeyError) as e:
+        init_person = list(person_role_dict.keys())[0]
+        print(f"[run.py channel={_channel}] Parse error, using {init_person}. Error: {e}") 
 
 credits_left = {key: 100 for key in person_role_dict.keys()}
-
-# print("Initial credits:", credits_left)
+print(f"[run.py channel={_channel}] Started. History file: {HISTORY_FILE}", file=sys.stderr, flush=True)
 
 while any(credits_left[key] > 0 for key in credits_left):
     
@@ -64,15 +91,13 @@ while any(credits_left[key] > 0 for key in credits_left):
     for key in person_role_dict:
         if credits_left[key] > 0:
             try:
-                # generate_bid_score_each_user outputs percentage likelihood. It has to be scaled by credit left. 
-                llm_bid_score = utils.generate_bid_score_each_user(key, credits_left, "claude-3-5-sonnet-20240620")                
-                random_numbers[key] = int(0.01 * float(json.loads(llm_bid_score)["score"]) * credits_left[key])  # Scale bid by credits left
-                print("claude model worked. Bid score:", random_numbers[key])
-            except:
-                # generate_bid_score_each_user outputs percentage likelihood. It has to be scaled by credit left.
-                llm_bid_score = utils.generate_bid_score_each_user(key, credits_left, "llama-3.1-8b-instant")
+                llm_bid_score = utils.generate_bid_score_each_user(key, credits_left, utils.PRIMARY_MODEL)
                 random_numbers[key] = int(0.01 * float(json.loads(llm_bid_score)["score"]) * credits_left[key])
-                print("llama model worked. Bid score:", random_numbers[key])
+                print("primary model worked. Bid score:", random_numbers[key])
+            except Exception:
+                llm_bid_score = utils.generate_bid_score_each_user(key, credits_left, utils.FALLBACK_MODEL)
+                random_numbers[key] = int(0.01 * float(json.loads(llm_bid_score)["score"]) * credits_left[key])
+                print("fallback model worked. Bid score:", random_numbers[key])
         else:
             random_numbers[key] = 0  # Can't bid if no credits
 

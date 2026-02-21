@@ -14,7 +14,7 @@ dist/
 build/
 
 # Virtual environments
-agentic_social/
+agentic_coffee_chat/
 venv/
 env/
 ENV/

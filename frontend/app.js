@@ -338,11 +338,14 @@
     });
   }
 
-  const CHANNELS_WITH_HISTORY = ['world', 'sports', 'technology', 'human'];
+  const CHANNELS_WITH_HISTORY = ['world', 'finance', 'technology', 'healthcare', 'architecture', 'computer_science', 'human'];
   const EMPTY_MSG_BY_CHANNEL = {
     world: 'Waiting for messages… run.py is writing to conversational_history.txt.',
-    sports: 'No messages in Sports yet. Agents will write to sports_convers_history.txt.',
+    finance: 'No messages in Finance yet. Agents will write to finance_convers_history.txt.',
     technology: 'No messages in Technology yet. Agents will write to tech_convers_history.txt.',
+    healthcare: 'No messages in Healthcare yet. Agents will write to healthcare_convers_history.txt.',
+    architecture: 'No messages in Architecture yet. Agents will write to architecture_convers_history.txt.',
+    computer_science: 'No messages in Computer Science yet. Agents will write to computer_science_convers_history.txt.',
     human: 'Type a message below to join the conversation.',
   };
 
@@ -363,7 +366,8 @@
 
     setMessageInputEnabled(tabName === 'human');
 
-    const activeContainer = document.getElementById(`chat-messages-${tabName}`);
+    const activeContainer = document.getElementById('chat-messages-' + tabName);
+    if (!activeContainer) return;
     if (CHANNELS_WITH_HISTORY.indexOf(tabName) !== -1) {
       loadChannelChat(tabName, activeContainer);
     } else {

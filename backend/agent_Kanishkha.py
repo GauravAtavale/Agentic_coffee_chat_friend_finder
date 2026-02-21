@@ -8,9 +8,6 @@ REPO_ROOT = globals().get("REPO_ROOT", Path(__file__).resolve().parent.parent)
 HISTORY_FILE = globals().get("HISTORY_FILE", REPO_ROOT / "data" / "conversational_history.txt")
 CONFIG_DIR = REPO_ROOT / "config"
 
-init_model = "claude-sonnet-4-5-20250929"
-fallback_model = "llama-3.1-8b-instant"
-
 # ================================== Get System Prompt ==================================
 
 person_name = "Kanishkha_S"
@@ -37,9 +34,9 @@ sys_prompt = persona_prompt + action_prompt
 conversation_hist_format = utils.format_history_as_string(turns=10)
 
 try:
-    agent_resp = utils.agent_sim(init_model, sys_prompt, conversation_hist_format)
-except:
-    agent_resp = utils.agent_sim(fallback_model, sys_prompt, conversation_hist_format)
+    agent_resp = utils.agent_sim(utils.PRIMARY_MODEL, sys_prompt, conversation_hist_format)
+except Exception:
+    agent_resp = utils.agent_sim(utils.FALLBACK_MODEL, sys_prompt, conversation_hist_format)
 
 # Clean response 
 agent_resp = re.sub(r"^[^:\n]+\s*:\s*", "", agent_resp, count=1)

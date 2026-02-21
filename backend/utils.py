@@ -8,6 +8,17 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 HISTORY_FILE = REPO_ROOT / "data" / "conversational_history.txt"
 CONFIG_DIR = REPO_ROOT / "config"
 
+# Model config: single source of truth from config/models.json (used for bidding + agent responses)
+_MODELS_PATH = CONFIG_DIR / "models.json"
+if _MODELS_PATH.exists():
+    with open(_MODELS_PATH, "r", encoding="utf-8") as f:
+        _models = json.load(f)
+    PRIMARY_MODEL = _models.get("primary", "claude-sonnet-4-5-20250929")
+    FALLBACK_MODEL = _models.get("fallback", "llama-3.1-8b-instant")
+else:
+    PRIMARY_MODEL = "claude-sonnet-4-5-20250929"
+    FALLBACK_MODEL = "llama-3.1-8b-instant"
+
 # Load .env for API keys
 try:
     from dotenv import load_dotenv

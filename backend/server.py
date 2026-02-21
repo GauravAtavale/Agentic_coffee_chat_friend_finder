@@ -70,23 +70,28 @@ CONFIG_DIR = REPO_ROOT / "config"
 # Channel -> history filename (under data/)
 CHANNEL_FILES = {
     "world": "conversational_history.txt",
-    "sports": "sports_convers_history.txt",
+    "finance": "finance_convers_history.txt",
     "technology": "tech_convers_history.txt",
+    "healthcare": "healthcare_convers_history.txt",
+    "architecture": "architecture_convers_history.txt",
+    "computer_science": "computer_science_convers_history.txt",
     "human": "human_convers_history.txt",
 }
 
-def _history_file_for_channel(channel: str):
-    """Resolve channel to full path; default to world if unknown."""
+def _history_file_for_channel(channel: str) -> Path:
+    """Resolve channel to absolute path of its history file; default to world if unknown."""
     filename = CHANNEL_FILES.get(channel, CHANNEL_FILES["world"])
-    return DATA_DIR / filename
+    return (DATA_DIR / filename).resolve()
 
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="Agentic Social – world_chat")
 
-_run_process = None
+# One run.py process per channel (world, finance, technology, healthcare, architecture, computer_science)
+SIMULATION_CHANNELS = [c for c in CHANNEL_FILES if c != "human"]
+_run_processes: dict = {}
 
 
 def _load_history(history_path: Path):
@@ -161,14 +166,21 @@ async def serve_index():
     index_path = FRONTEND_DIR / "index.html"
     if not index_path.exists():
         return {"error": "Frontend files not found."}
-    return FileResponse(index_path)
+    return FileResponse(
+        index_path,
+        headers={"Cache-Control": "no-store, no-cache, must-revalidate"},
+    )
 
 
 @app.get("/api/history")
 async def api_history(channel: str = "world"):
-    """Return full conversation history for the given channel (world, sports, technology, human)."""
+    """Return full conversation history for the given channel (world, finance, technology, healthcare, architecture, computer_science, human)."""
     path = _history_file_for_channel(channel)
-    return {"messages": _load_history(path)}
+    messages = _load_history(path)
+    return JSONResponse(
+        content={"messages": messages},
+        headers={"Cache-Control": "no-store, no-cache, must-revalidate"},
+    )
 
 
 @app.get("/api/history/stream")
@@ -220,55 +232,56 @@ if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
 
-def _ensure_history_file_exists():
-    """Ensure world conversational_history.txt exists with at least one line so run.py can read last speaker."""
-    world_file = _history_file_for_channel("world")
-    world_file.parent.mkdir(parents=True, exist_ok=True)
-    if not world_file.exists() or world_file.stat().st_size == 0:
-        with open(world_file, "w", encoding="utf-8") as f:
+def _ensure_history_file_exists(channel: str):
+    """Ensure the channel's history file exists with at least one line so run.py can read last speaker."""
+    path = _history_file_for_channel(channel)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.exists() or path.stat().st_size == 0:
+        with open(path, "w", encoding="utf-8") as f:
             f.write('{"role": "Gaurav", "content": "Conversation started."}\n')
-        print("Created empty conversational_history.txt with one seed line for run.py.")
+        print(f"Created seed line for channel: {channel}")
 
 
-def _start_run_py():
-    """Start run.py in the background (writes to ../conversational_history.txt)."""
-    global _run_process
-    if _run_process is not None and _run_process.poll() is None:
+def _start_run_py_for_channel(channel: str):
+    """Start run.py for one channel in the background (bidding + agents write to that channel's history file)."""
+    global _run_processes
+    if channel in _run_processes and _run_processes[channel].poll() is None:
         return
     run_py = BASE_DIR / "run.py"
     if not run_py.exists():
         print("Warning: run.py not found, skipping auto-start")
         return
-    _ensure_history_file_exists()
-    # Inherit env (including ANTHROPIC_API_KEY, GROQ_API_KEY from .env)
+    _ensure_history_file_exists(channel)
     env = os.environ.copy()
-    _run_process = subprocess.Popen(
-        [sys.executable, str(run_py)],
+    proc = subprocess.Popen(
+        [sys.executable, str(run_py), "--channel", channel],
         cwd=str(BASE_DIR),
         env=env,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE,
     )
+    _run_processes[channel] = proc
 
     def log_stderr():
-        if _run_process.stderr:
-            for line in iter(_run_process.stderr.readline, ""):
+        if proc.stderr:
+            for line in iter(proc.stderr.readline, ""):
                 if line:
-                    sys.stderr.write("[run.py] " + line.decode("utf-8", errors="replace"))
-            _run_process.stderr.close()
+                    sys.stderr.write("[run.py %s] " % channel + line.decode("utf-8", errors="replace"))
+            proc.stderr.close()
 
     t = threading.Thread(target=log_stderr, daemon=True)
     t.start()
-    print("Started run.py in background (PID %s). Check stderr for [run.py] if history is not updating." % _run_process.pid)
+    print("Started run.py for channel '%s' (PID %s)." % (channel, proc.pid))
 
 
 @app.on_event("startup")
 async def startup():
     global _PORT
-    _start_run_py()
+    for ch in SIMULATION_CHANNELS:
+        _start_run_py_for_channel(ch)
     print("Agentic Social – world_chat")
     print(f"  UI: http://localhost{'' if _PORT == 80 else ':' + str(_PORT)}")
-    print("  run.py is running in background; new lines in data/conversational_history.txt stream to the UI.")
+    print("  One run.py per tab (world, finance, technology, healthcare, architecture, computer_science); each stream updates its tab.")
 
 
 def main():

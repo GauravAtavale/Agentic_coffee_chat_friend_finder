@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <title>Chat</title>
-  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="stylesheet" href="/static/styles.css?v=2" />
 </head>
 <body>
   <div class="app">
@@ -53,12 +54,24 @@
           World
           <span class="notification-badge"></span>
         </button>
-        <button class="tab" data-tab="sports">
-          Sports
+        <button class="tab" data-tab="finance">
+          Finance
           <span class="notification-badge"></span>
         </button>
         <button class="tab" data-tab="technology">
           Technology
+          <span class="notification-badge"></span>
+        </button>
+        <button class="tab" data-tab="healthcare">
+          Healthcare
+          <span class="notification-badge"></span>
+        </button>
+        <button class="tab" data-tab="architecture">
+          Architecture
+          <span class="notification-badge"></span>
+        </button>
+        <button class="tab" data-tab="computer_science">
+          Computer Science
           <span class="notification-badge"></span>
         </button>
         <button class="tab" data-tab="human">
@@ -70,8 +83,11 @@
 
     <main class="chat-main">
       <div id="chat-messages-world" class="chat-messages active" data-tab="world"></div>
-      <div id="chat-messages-sports" class="chat-messages" data-tab="sports"></div>
+      <div id="chat-messages-finance" class="chat-messages" data-tab="finance"></div>
       <div id="chat-messages-technology" class="chat-messages" data-tab="technology"></div>
+      <div id="chat-messages-healthcare" class="chat-messages" data-tab="healthcare"></div>
+      <div id="chat-messages-architecture" class="chat-messages" data-tab="architecture"></div>
+      <div id="chat-messages-computer_science" class="chat-messages" data-tab="computer_science"></div>
       <div id="chat-messages-human" class="chat-messages" data-tab="human"></div>
     </main>
 
@@ -83,6 +99,6 @@
     </div>
     </div>
   </div>
-  <script src="/static/app.js"></script>
+  <script src="/static/app.js?v=2"></script>
 </body>
 </html>

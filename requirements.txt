@@ -1,0 +1,14 @@
+# Agentic Social - Consolidated Requirements
+# Backend (FastAPI server + multi-agent simulation)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+python-dotenv>=1.0.0
+anthropic>=0.18.0
+groq>=0.4.0
+pydantic>=2.5.0
+
+# Voice interview script (scripts/run_questions.py)
+elevenlabs>=1.0.0
+sounddevice>=0.4.6
+soundfile>=0.12.0
+numpy>=1.24.0
