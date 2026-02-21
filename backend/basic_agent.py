@@ -7,7 +7,7 @@ import utils
 
 def agent_sim(model_LLM, plan_sys_prompt, user_query):
   # Add your Groq API key here (get one for free at https://console.groq.com/keys)
-  api_key = "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"  # Replace with your actual API key
+  api_key = "<YOUR_API_KEY>"  # Replace with your actual API key
 
   client = Groq(api_key=api_key)
   completion = client.chat.completions.create(
