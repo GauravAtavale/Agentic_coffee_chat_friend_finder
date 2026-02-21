@@ -1,0 +1,118 @@
+{
+    "profile": {
+      "name": "Gaurav Atavale",
+      "headline": "AI Research Scientist @ American Express | MS Data Science | prev - Flipkart, Mu Sigma",
+      "location": "New York, New York, United States",
+      "about": "I am a problem solver, who believes in the ability of leveraging structured problem thinking and data sciences to solve real world problems and one who is a strong believer in team work. I am intrinsically curious on seeking business problems by asking the right question and passionate about solving complex business problems using latest technological platforms/tools and process to provide the best in class solution. Currently looking to leverage my learning to pave the way for future insights/decisions and help harness the power of big data, analytics & decision sciences in their operational and strategic decisions.",
+      "profile_url": "https://www.linkedin.com/in/gauravatavale"
+    },
+    "experience": [
+      {
+        "title": "Manager – Finance Data Science",
+        "company": "American Express",
+        "dates": "Feb 2023 – Present",
+        "location": "Manhattan, New York, United States",
+        "description": "Finance-focused data science role leveraging advanced analytics and decision sciences for operational and strategic decisions."
+      },
+      {
+        "title": "Associate Instructor – Elements of Artificial Intelligence",
+        "company": "Indiana University Bloomington",
+        "dates": "Aug 2022 – Dec 2022",
+        "location": "Bloomington, Indiana, United States",
+        "description": "Responsible for course organization, mentoring students, and grading assignments and projects."
+      },
+      {
+        "title": "Associate Instructor – Performance Analytics",
+        "company": "Indiana University Bloomington",
+        "dates": "Aug 2022 – Dec 2022",
+        "location": "Bloomington, Indiana, United States",
+        "description": "Created quizzes and discussion sessions, handled course organization, mentoring, and grading."
+      },
+      {
+        "title": "Associate Instructor (TA – Collective Intelligence, I‑469)",
+        "company": "Indiana University Luddy School of Informatics, Computing, and Engineering",
+        "dates": "Jan 2022 – May 2022",
+        "location": "Bloomington, Indiana, United States",
+        "description": "Created quizzes and discussion sessions, managed course organization, mentoring, and grading."
+      },
+      {
+        "title": "Senior Business Analyst",
+        "company": "Flipkart",
+        "dates": "Jul 2018 – Jun 2021",
+        "location": "Bangalore",
+        "description": "Recipient of CEO Award for Customer Excellence; built dynamic propensity model using XGBoost to predict customers contacting support after orders; developed churn prediction model using LightGBM for loyalty/retention; led A/B experiments across product, business, operations, and finance to drive data‑driven decisions."
+      },
+      {
+        "title": "Business Analyst",
+        "company": "Flipkart",
+        "dates": "Jul 2017 – Jun 2018",
+        "location": "Bangalore",
+        "description": "Core Supermart (Grocery) team; conceptualized grocery shopping model and optimized user journey; identified target cohorts via clustering; predicted product‑level sales with Random Forest regressor (MAPE ~15%), increasing annual revenue by about $1.2M and reducing out‑of‑stock by ~35%; defined grocery analytics framework and reporting."
+      },
+      {
+        "title": "Decision Scientist",
+        "company": "Mu Sigma Inc.",
+        "dates": "Aug 2014 – Jun 2017",
+        "location": "Bangalore",
+        "description": "Worked for a major PC manufacturer and large retail chain; conducted marketing campaign analysis and ecosystem attach programs (cross‑sell opportunities, recommendation engines); developed quality index and decision support tools for sourcing/quality teams."
+      }
+    ],
+    "education": [
+      {
+        "institution": "Indiana University Bloomington",
+        "degree": "Master of Science (MS)",
+        "field": "Data Science",
+        "dates": "2021 – 2023"
+      },
+      {
+        "institution": "The National Institute of Engineering, Mysore",
+        "degree": "Bachelor’s Degree",
+        "field": "Mechanical Engineering",
+        "dates": "2010 – 2014"
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Advanced RAG Applications with Vector Databases",
+        "issuer": "LinkedIn"
+      },
+      {
+        "name": "RAG and Fine-Tuning Explained",
+        "issuer": "LinkedIn"
+      },
+      {
+        "name": "Introduction to Large Language Models",
+        "issuer": "LinkedIn"
+      },
+      {
+        "name": "ADPList Super Mentor",
+        "issuer": "adplist.org"
+      },
+      {
+        "name": "Deep Learning: Getting Started",
+        "issuer": "LinkedIn"
+      }
+    ],
+    "skills": [
+      "Data Science",
+      "Machine Learning",
+      "Artificial Intelligence",
+      "XGBoost",
+      "LightGBM",
+      "Random Forest",
+      "A/B Testing",
+      "RAG (Retrieval-Augmented Generation)",
+      "Large Language Models (LLM)",
+      "Clustering",
+      "Predictive Modeling",
+      "Strategic Decision Making"
+    ],
+    "languages": [
+      "English",
+      "Hindi",
+      "Kannada",
+      "Marathi",
+      "Tulu"
+    ]
+  }
+  

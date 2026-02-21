@@ -1,0 +1,7 @@
+{
+  "recurring": [
+    { "days": ["mon", "wed", "fri"], "start": "17:00", "end": "19:00" },
+    { "days": ["sun"], "start": "10:00", "end": "14:00" }
+  ],
+  "timezone": "America/New_York"
+}

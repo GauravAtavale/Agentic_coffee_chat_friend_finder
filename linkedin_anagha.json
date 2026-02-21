@@ -1,0 +1,119 @@
+{
+    "profile": {
+      "name": "Anagha Palandye",
+      "headline": "Applied AI Research | Post-Training | RL | RAG | Model Evaluation | Data Scientist | MS Data Science @ NYU",
+      "location": "New York, New York, United States",
+      "about": "I’m an Applied LLM & Data Scientist currently pursuing a Master’s in Data Science at NYU’s Center for Data Science, working on applied LLM research, post-training, RL, and RAG, and focused on building reliable, evaluation‑driven AI systems.",
+      "profile_url": "https://www.linkedin.com/in/anagha-palandye"
+    },
+    "experience": [
+      {
+        "title": "Applied LLM Research",
+        "company": "New York University (NYU Applied LLM Research)",
+        "dates": "Jan 2025 – Present",
+        "location": "New York, New York, United States",
+        "description": "Post-trained Qwen2.5-0.5B using RLVR with GRPO (VERL) on GSM8K, improving reasoning accuracy from 33% to 63%; designed hybrid local/meta-reward weighting to improve inference stability and reasoning trace quality; built citation-aware RAG pipelines using MiniLM retrieval, cross-encoder reranking, and NLI-based validation to reduce hallucinations; evaluated LLM reasoning via chain-of-thought analysis, trace validity checks, and GPT-4o–based error analysis."
+      },
+      {
+        "title": "Data Science Intern – Treasury Data Science",
+        "company": "American Express",
+        "dates": "Jun 2025 – Aug 2025",
+        "location": "New York, New York, United States",
+        "description": "Treasury Data Science internship focusing on data-driven financial modeling and analysis."
+      },
+      {
+        "title": "Data Analyst – Audit Analytics",
+        "company": "Commonwealth Bank",
+        "dates": "Feb 2022 – Apr 2023",
+        "location": "Bengaluru, Karnataka, India",
+        "description": "Supported Technology & Cyber and Financial Crime & Regulatory Compliance audit portfolios as a data analyst."
+      },
+      {
+        "title": "Data Analyst",
+        "company": "Tech Mahindra",
+        "dates": "Jan 2021 – Feb 2022",
+        "location": "Bangalore Urban, Karnataka, India",
+        "description": "Developed a revenue forecast model using Random Forest regressor (MAPE 12%) to set product-level quarterly targets and optimize pricing, leading to a reported $1.2M quarterly revenue increase; achieved monthly loss prevention of $1M by detecting potential fraudulent billing behavior using anomaly detection (Z-scores, percentiles, Naïve Bayes with 92% accuracy); built dynamic dashboards to monitor leakages across six internal systems, reducing potential losses by 20% and improving system integrity."
+      },
+      {
+        "title": "Software Engineer",
+        "company": "Tech Mahindra",
+        "dates": "Oct 2017 – Dec 2020",
+        "location": "Bangalore, India",
+        "description": "Performed A/B tests and deep-dive data analysis contributing to a 10% boost in user engagement and 5% increase in conversion rates; collaborated on automated security log transfer mechanisms across downstream interfaces, cutting manual work by 85%; built Tableau dashboards for customer order analysis and trend discovery, enabling targeted marketing with a 20% uplift in conversion rates."
+      },
+      {
+        "title": "Associate Software Engineer",
+        "company": "Tech Mahindra",
+        "dates": "Oct 2016 – Sep 2017",
+        "location": "Bangalore Urban, Karnataka, India",
+        "description": "Early engineering role focusing on software development and maintenance."
+      },
+      {
+        "title": "Student Coordinator",
+        "company": "Computer Society of India – Bangalore Chapter",
+        "dates": "Feb 2015 – Dec 2015",
+        "location": "Bengaluru, Karnataka, India",
+        "description": "Organized technical events at the intra-college level to build a community of like-minded peers."
+      }
+    ],
+    "education": [
+      {
+        "institution": "New York University (Center for Data Science)",
+        "degree": "Master of Science (MS)",
+        "field": "Data Science",
+        "status": "Current student",
+        "dates": ""
+      },
+      {
+        "institution": "Visvesvaraya Technological University",
+        "degree": "Bachelor’s Degree",
+        "field": "Computer Science and Engineering",
+        "dates": ""
+      },
+      {
+        "institution": "Jnanodaya Pre University College",
+        "degree": "Pre-university",
+        "field": "PCMB (Physics, Chemistry, Math, Biology)",
+        "dates": ""
+      },
+      {
+        "institution": "Nivedita Girls High School",
+        "degree": "High School",
+        "field": null,
+        "dates": ""
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Neural Networks and Deep Learning",
+        "issuer": "DeepLearning.AI"
+      },
+      {
+        "name": "Machine Learning A-Z: Python and R",
+        "issuer": "Udemy"
+      },
+      {
+        "name": "Complete Python Bootcamp: Go from zero to hero in Python 3",
+        "issuer": "Udemy"
+      }
+    ],
+    "skills": [
+      "Applied LLM Research",
+      "Post-Training",
+      "Reinforcement Learning (RL)",
+      "RAG (Retrieval-Augmented Generation)",
+      "Model Evaluation",
+      "Data Science",
+      "Python",
+      "Tableau",
+      "Machine Learning"
+    ],
+    "languages": [
+      "English",
+      "Hindi",
+      "Kannada",
+      "Marathi"
+    ]
+  }
+  

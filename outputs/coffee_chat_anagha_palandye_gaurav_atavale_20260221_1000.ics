@@ -1,0 +1,12 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Coffee Chat Slot Suggester//EN
+BEGIN:VEVENT
+UID:coffee-chat-2026-02-21T10:00:00@profile-matcher
+DTSTAMP:20260221T131910
+DTSTART:20260221T100000
+DTEND:20260221T110000
+SUMMARY:Coffee Chat – Anagha Palandye & Gaurav Atavale
+DESCRIPTION:Suggested slot from profile matcher.
+END:VEVENT
+END:VCALENDAR
