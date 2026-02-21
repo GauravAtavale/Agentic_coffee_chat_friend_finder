@@ -6,7 +6,7 @@ This folder now includes a **web app** that uses the same workflow as `run.py` (
 
 - **`server.py`** – FastAPI app: serves the UI and exposes `/api/history` and `/api/simulation/stream`.
 - **`simulation_stream.py`** – Runs the same bidding loop as `run.py` but yields SSE events so the server can stream messages to the client.
-- **`run_web.py`** – Entry point to start the web server (port 8001).
+- **`run_web.py`** – Entry point to start the web server (port 8002).
 - **`static/`** – Frontend (same style as the backend app):
   - `index.html` – Single-page UI: sidebar (personas), conversation area, “Load history” and “Start simulation”.
   - `app.js` – Fetches history and consumes the simulation SSE stream.
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 python run_web.py
 ```
 
-Then open **http://localhost:8001**.
+Then open **http://localhost:8002**.
 
 ### API keys (fix 401 "invalid x-api-key")
 

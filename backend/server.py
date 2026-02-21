@@ -5,14 +5,31 @@ and streams new lines from data/conversational_history.txt to the UI.
 import json
 import os
 import signal
+import socket
 import subprocess
 import sys
 import threading
 import time
 from pathlib import Path
 
+# Set by main() before uvicorn runs; used in startup() to print UI URL
+_PORT: int = 8002
 
-def _free_port(port: int = 8001) -> None:
+
+def _available_port(start: int = 8002, max_tries: int = 10) -> int:
+    """Return the first port in [start, start+max_tries) that is free to bind."""
+    for i in range(max_tries):
+        port = start + i
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(("0.0.0.0", port))
+                return port
+        except OSError:
+            continue
+    return start  # fallback, uvicorn will fail with clear error
+
+
+def _free_port(port: int = 8002) -> None:
     """Kill any process listening on the given port."""
     try:
         out = subprocess.run(
@@ -25,7 +42,7 @@ def _free_port(port: int = 8001) -> None:
             for pid in out.stdout.strip().split():
                 try:
                     os.kill(int(pid), signal.SIGKILL)
-                except (ProcessLookupError, ValueError):
+                except (ProcessLookupError, ValueError, PermissionError):
                     pass
             time.sleep(2)
     except (FileNotFoundError, subprocess.TimeoutExpired):
@@ -38,6 +55,7 @@ sys.path.insert(0, str(BASE_DIR))
 # Load .env so subprocess run.py inherits ANTHROPIC_API_KEY, GROQ_API_KEY
 try:
     from dotenv import load_dotenv
+    load_dotenv(BASE_DIR.parent / "config" / ".env")  # config/.env first (primary API keys)
     load_dotenv(BASE_DIR / ".env")
     load_dotenv(BASE_DIR.parent / ".env")
 except ImportError:
@@ -246,21 +264,24 @@ def _start_run_py():
 
 @app.on_event("startup")
 async def startup():
+    global _PORT
     _start_run_py()
     print("Agentic Social – world_chat")
-    print("  UI: http://localhost:8001")
+    print(f"  UI: http://localhost{'' if _PORT == 80 else ':' + str(_PORT)}")
     print("  run.py is running in background; new lines in data/conversational_history.txt stream to the UI.")
 
 
 def main():
+    global _PORT
     import argparse
     parser = argparse.ArgumentParser(description="Agentic Social world_chat server")
-    parser.add_argument("--free-port", action="store_true", help="Kill process on port 8001 before starting")
+    parser.add_argument("--free-port", action="store_true", help="Kill process on port 8002 before starting")
     args = parser.parse_args()
     if args.free_port:
-        _free_port(8001)
+        _free_port(8002)
+    _PORT = _available_port(8002)
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=_PORT)
 
 
 if __name__ == "__main__":
