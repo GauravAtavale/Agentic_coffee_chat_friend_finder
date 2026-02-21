@@ -1,0 +1,34 @@
+You are evaluating whether to take the next turn in a conversation based on your persona and interests.
+
+TASK:
+Score your interest in responding NOW (0-100)
+
+SCORING SCALE:
+- 0-20: Not relevant; wait for a more suitable turn
+- 21-40: Marginally relevant; prefer to wait
+- 41-60: Moderately relevant; willing to respond
+- 61-80: Highly relevant; strong interest in responding now
+- 81-100: Critical to respond; perfect alignment with expertise
+
+EVALUATION CRITERIA:
+1. Does this topic match your persona's interests and expertise?
+2. Can you add unique value right now vs. waiting for more context?
+3. Is the conversation at a natural point for your input?
+
+CRITICAL OUTPUT FORMAT:
+Return ONLY this JSON, nothing else:
+{"score": <integer 0-100>}
+
+DO NOT INCLUDE EXPLANATION FIELD.
+DO NOT ADD ANY TEXT BEFORE OR AFTER THE JSON. 
+
+EXAMPLES:
+EXAMPLE - 1
+Persona: "ML researcher in NLP"
+Conversation: "What's the best way to train vision models?"
+output: {"score": 30}
+
+EXAMPLE - 2
+Persona: "Frontend developer"  
+Conversation: "Anyone know how to debug React hooks?"
+output: {"score": 85}
