@@ -740,10 +740,42 @@
       }
 
       document.getElementById('confirm-meet').onclick = function() {
-        if (selectedSlot && selectedDate) {
-          const dt = new Date(selectedDate + 'T' + selectedSlot);
-          alert('Meet requested for ' + dt.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + '. (Integration with backend can send this to the server.)');
-        }
+        if (!selectedSlot || !selectedDate) return;
+        const { viewer, recommended } = getViewerAndRecommended();
+        const name = recommended.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+        const btn = document.getElementById('confirm-meet');
+        btn.disabled = true;
+        btn.textContent = 'Creating…';
+        fetch('/api/create-meet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: 'Coffee chat with ' + name,
+            date_ymd: selectedDate,
+            time_hm: selectedSlot,
+            location: 'Virtual',
+            description: 'Coffee chat',
+            viewer_key: viewer,
+            recommended_key: recommended
+          })
+        })
+          .then(function(r) { return r.json().then(function(data) { return { ok: r.ok, data }; }); })
+          .then(function({ ok, data }) {
+            btn.disabled = false;
+            btn.textContent = 'Confirm meet';
+            if (ok && data.ok) {
+              const dt = new Date(selectedDate + 'T' + selectedSlot);
+              alert('Meet created for ' + dt.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + '. Check your calendar.');
+              closeCalendar();
+            } else {
+              alert('Could not create meet: ' + (data.error || 'Unknown error'));
+            }
+          })
+          .catch(function(err) {
+            btn.disabled = false;
+            btn.textContent = 'Confirm meet';
+            alert('Request failed: ' + (err.message || 'Network error'));
+          });
       };
 
       function closeCalendar() {

@@ -8,13 +8,20 @@
   let lastSentHumanTime = 0;
   let audioContext = null;
 
-  // Avatar colors for different personas
+  // Profile picture filenames in profile_pictures/ folder (must match files exactly)
+  const ROLE_TO_PROFILE_PIC = {
+    'Gaurav': 'Gaurav_Atavale_profile_pic.jpeg',
+    'Anagha': 'Anagha_Palandye_profile_pic.jpeg',
+    'Kanishkha': 'Kanishkha_profile_pic.jpeg',
+    'Nirbhay': 'Nirbhay_profile_pic.jpeg',
+  };
+
   const avatarColors = {
-    'Gaurav': '#D4A574',
-    'Anagha': '#C49A6C',
-    'Kanishkha': '#B8935F',
-    'Nirbhay': '#A67C52',
-    'Human': '#6B8E23',
+    'Gaurav': '#c4a574',
+    'Anagha': '#8b7355',
+    'Kanishkha': '#7cb083',
+    'Nirbhay': '#9a9692',
+    'Human': '#7cb083',
   };
 
   const avatarInitials = {
@@ -254,23 +261,28 @@
 
     const avatarImg = document.createElement('div');
     avatarImg.className = 'avatar-img';
-    avatarImg.style.background = `linear-gradient(135deg, ${getAvatarColor(role)} 0%, ${getAvatarColor(role)}dd 100%)`;
+    avatarImg.style.background = getAvatarColor(role);
     avatarImg.textContent = getAvatarInitial(role);
 
-    // Add flag emoji (simplified - using country flags based on name)
-    const flagEmoji = getFlagEmoji(role);
-    if (flagEmoji) {
-      const flagEl = document.createElement('span');
-      flagEl.className = 'avatar-flag';
-      flagEl.textContent = flagEmoji;
-      avatarFrame.appendChild(flagEl);
+    var profilePic = ROLE_TO_PROFILE_PIC[role];
+    if (profilePic) {
+      var img = document.createElement('img');
+      img.alt = role;
+      var base = profilePic.replace(/\.(jpe?g|png)$/i, '');
+      var exts = ['jpeg', 'jpg', 'png'];
+      var idx = 0;
+      function tryNext() {
+        if (idx >= exts.length) return;
+        img.src = '/profile_pictures/' + base + '.' + exts[idx];
+        idx++;
+      }
+      img.onerror = tryNext;
+      img.onload = function () {
+        avatarImg.textContent = '';
+        avatarImg.appendChild(img);
+      };
+      tryNext();
     }
-
-    // Add level badge
-    const levelEl = document.createElement('span');
-    levelEl.className = 'avatar-level';
-    levelEl.textContent = 'Lv.' + (Math.floor(Math.random() * 50) + 50); // Random level 50-99
-    avatarContainer.appendChild(levelEl);
 
     avatarFrame.appendChild(avatarImg);
     avatarContainer.appendChild(avatarFrame);
@@ -548,6 +560,14 @@
     }
   }
 
+  // Display name -> URL key for recommended_profile (viewer/recommended params)
+  var DISPLAY_NAME_TO_KEY = {
+    'Gaurav': 'gaurav_atavale',
+    'Anagha': 'anagha_palandye',
+    'Kanishkha': 'kanishkha_s',
+    'Nirbhay': 'nirbhay_r'
+  };
+
   function renderRecommendations(data, profileName) {
     if (!recommendationsContent) return;
     const recs = (data && data.recommendations) || [];
@@ -563,37 +583,27 @@
       recommendationsContent.innerHTML = '<p class="rec-detail">No recommendations yet. Try again after more conversation.</p>';
       return;
     }
+    const viewerKey = DISPLAY_NAME_TO_KEY[profileName] || 'gaurav_atavale';
     const sorted = recs.slice().sort(function (a, b) {
       return (b.coffee_chat_likelihood || 0) - (a.coffee_chat_likelihood || 0);
     });
     let html = '';
     sorted.forEach(function (r, i) {
       const rank = i + 1;
-      const user = escapeHtml(r.user || 'Unknown');
+      const user = (r.user || 'Unknown').trim();
+      const userEsc = escapeHtml(user);
       const likelihood = (r.coffee_chat_likelihood != null) ? Math.round(Number(r.coffee_chat_likelihood) * 100) + '%' : '—';
-      const common = Array.isArray(r.common_aspects) ? r.common_aspects.join(', ') : (r.common_aspects || '');
-      const learnFrom = escapeHtml(r.what_you_can_learn_from_them || '');
-      const theyLearn = escapeHtml(r.what_they_can_learn_from_you || '');
-      html += '<div class="rec-row" data-index="' + i + '">';
-      html += '<div class="rec-row-head">';
-      html += '<span>#' + rank + ' ' + user + '</span>';
-      html += '<span class="rec-row-chevron">▼</span>';
-      html += '</div>';
-      html += '<div class="rec-row-body">';
-      html += '<div class="rec-likelihood">Likelihood: ' + likelihood + '</div>';
-      if (common) html += '<div class="rec-detail"><span class="rec-detail-label">Common:</span> ' + escapeHtml(common) + '</div>';
-      if (learnFrom) html += '<div class="rec-detail"><span class="rec-detail-label">You can learn:</span> ' + learnFrom + '</div>';
-      if (theyLearn) html += '<div class="rec-detail"><span class="rec-detail-label">They can learn:</span> ' + theyLearn + '</div>';
-      html += '</div>';
+      const recommendedKey = DISPLAY_NAME_TO_KEY[user] || user.toLowerCase().replace(/\s+/g, '_');
+      const profileUrl = '/recommended_profile/?viewer=' + encodeURIComponent(viewerKey) + '&recommended=' + encodeURIComponent(recommendedKey);
+      html += '<div class="rec-row rec-row-clickable">';
+      html += '<a class="rec-row-link" href="' + escapeHtml(profileUrl) + '">';
+      html += '<span class="rec-rank-num">#' + rank + '</span> ';
+      html += '<span class="rec-name">' + userEsc + '</span>';
+      html += ' <span class="rec-likelihood-inline">' + likelihood + '</span>';
+      html += '</a>';
       html += '</div>';
     });
     recommendationsContent.innerHTML = html;
-    recommendationsContent.querySelectorAll('.rec-row-head').forEach(function (head) {
-      head.addEventListener('click', function () {
-        var row = head.closest('.rec-row');
-        if (row) row.classList.toggle('expanded');
-      });
-    });
   }
 
   if (recommendBtn && recommendationsContent) {
